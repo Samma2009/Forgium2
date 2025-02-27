@@ -9,6 +9,6 @@ namespace Forgium
 {
     public interface ITag
     {
-        public void Render(Dictionary<string, object[]> CSSRules,HtmlNode node);
+        public void Render(Dictionary<string, object[]> CSSRules,HtmlNode node,IRenderingSurface surface);
     }
 }

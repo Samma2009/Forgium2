@@ -5,15 +5,17 @@ namespace Forgium
     public class Forgium
     {
         IRenderingSurface renderingSurface;
-        Dictionary<string, Dictionary<string, object[]>> CSSRuleSet;
+        public Dictionary<string, Dictionary<string, object[]>> CSSRuleSet;
         Dictionary<string, ITag> Tags;
+        static string BaseCssRules = @".default {
+color: #000000;
+}";
 
         public Forgium(IRenderingSurface surface)
         {
-            CSSRuleSet = new();
+            CSSRuleSet = CSS.Parse(BaseCssRules);
             Tags = new();
             renderingSurface = surface;
-
         }
 
         public void RegisterTag(string name,ITag tag) => Tags[name] = tag;
@@ -30,7 +32,7 @@ namespace Forgium
         {
             if (node.NodeType == (HtmlNodeType.Text | HtmlNodeType.Comment)) return;
 
-            var classes = node.GetAttributeValue("class","").Split(" ");
+            var classes = node.GetAttributeValue("class","default").Split(" ");
 
             Dictionary<string, object[]> CSSRules = new();
 
@@ -44,7 +46,7 @@ namespace Forgium
                 }
             }
 
-            if (Tags.ContainsKey(node.Name)) Tags[node.Name].Render(CSSRules,node);
+            if (Tags.ContainsKey(node.Name)) Tags[node.Name].Render(CSSRules,node,renderingSurface);
 
             foreach (var item in node.ChildNodes) Iterate(item);
         }

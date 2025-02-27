@@ -23,7 +23,7 @@ namespace Forgium
 
                 if (trimmedLine.EndsWith("{"))
                 {
-                    currentSelector = trimmedLine.Substring(0, trimmedLine.Length - 1).Trim();
+                    currentSelector = trimmedLine.Trim().Substring(1, trimmedLine.Length - 1);
                     cssDictionary[currentSelector] = new Dictionary<string, object[]>();
                 }
                 else if (trimmedLine.EndsWith("}"))
@@ -105,6 +105,8 @@ namespace Forgium
                 throw new ArgumentException("Invalid hex color format.");
             }
         }
+
+
     }
 
 }
