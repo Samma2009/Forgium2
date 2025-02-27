@@ -1388,7 +1388,7 @@ namespace HtmlAgilityPack
 
 			return att.Value;
 #else
-			return GetAttributeValue<string>(name, def);
+			return GetAttributeString(name,def);
 #endif
         } 
 
@@ -1504,15 +1504,42 @@ namespace HtmlAgilityPack
 				return def;
 			}
 		}
+        public string GetAttributeString(string name,string def)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (!HasAttributes)
+            {
+                return def;
+            }
+
+            HtmlAttribute att = Attributes[name];
+            if (att == null)
+            {
+                return def;
+            }
+
+            try
+            {
+                return att.Value;
+            }
+            catch
+            {
+                return def;
+            }
+        }
 #endif
 
-		/// <summary>
-		/// Inserts the specified node immediately after the specified reference node.
-		/// </summary>
-		/// <param name="newChild">The node to insert. May not be <c>null</c>.</param>
-		/// <param name="refChild">The node that is the reference node. The newNode is placed after the refNode.</param>
-		/// <returns>The node being inserted.</returns>
-		public HtmlNode InsertAfter(HtmlNode newChild, HtmlNode refChild)
+        /// <summary>
+        /// Inserts the specified node immediately after the specified reference node.
+        /// </summary>
+        /// <param name="newChild">The node to insert. May not be <c>null</c>.</param>
+        /// <param name="refChild">The node that is the reference node. The newNode is placed after the refNode.</param>
+        /// <returns>The node being inserted.</returns>
+        public HtmlNode InsertAfter(HtmlNode newChild, HtmlNode refChild)
 		{
 			if (newChild == null)
 			{

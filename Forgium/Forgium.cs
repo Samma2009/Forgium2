@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Cosmos.System;
+using HtmlAgilityPack;
 
 namespace Forgium
 {
@@ -32,7 +33,7 @@ color: #000000;
         {
             if (node.NodeType == (HtmlNodeType.Text | HtmlNodeType.Comment)) return;
 
-            var classes = node.GetAttributeValue("class","default").Split(" ");
+            var classes = (node.Attributes["class"] != null ? node.Attributes["class"].Value : "default").Split(" ");
 
             Dictionary<string, object[]> CSSRules = new();
 

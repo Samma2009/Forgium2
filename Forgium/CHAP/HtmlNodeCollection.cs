@@ -165,7 +165,7 @@ namespace HtmlAgilityPack
         /// <param name="arrayIndex"></param>
         public void CopyTo(HtmlNode[] array, int arrayIndex)
         {
-            _items.CopyTo(array, arrayIndex);
+            
         }
 
         /// <summary>

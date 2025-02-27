@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgiumTwo", "ForgiumTwo\ForgiumTwo.csproj", "{9EA7A451-7593-4B0D-98AE-8512EE404B5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forgium", "Forgium\Forgium.csproj", "{9276F04F-C6AF-41B1-A08C-063E21A49026}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{9EA7A451-7593-4B0D-98AE-8512EE404B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EA7A451-7593-4B0D-98AE-8512EE404B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EA7A451-7593-4B0D-98AE-8512EE404B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9276F04F-C6AF-41B1-A08C-063E21A49026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9276F04F-C6AF-41B1-A08C-063E21A49026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9276F04F-C6AF-41B1-A08C-063E21A49026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9276F04F-C6AF-41B1-A08C-063E21A49026}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
