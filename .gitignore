@@ -1,3 +1,5 @@
 # Ignore all bin directories
 **/bin/
 **/obj
+*.vsidx
+/.vs
