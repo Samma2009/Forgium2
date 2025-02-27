@@ -1,2 +1,2 @@
-# Forgium2
-An open source Cosmos specific render for html
+# UNDER DEVELOPMENT
+### THIS LIBRARY IS NOT IN A USABLE STATE
