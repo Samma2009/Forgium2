@@ -23,7 +23,7 @@ namespace Forgium
 
                 if (trimmedLine.EndsWith("{"))
                 {
-                    currentSelector = trimmedLine.Trim().Substring(1, trimmedLine.Length - 1);
+                    currentSelector = trimmedLine.TrimStart(' ','{').TrimEnd(' ', '{');
                     cssDictionary[currentSelector] = new Dictionary<string, object[]>();
                 }
                 else if (trimmedLine.EndsWith("}"))
