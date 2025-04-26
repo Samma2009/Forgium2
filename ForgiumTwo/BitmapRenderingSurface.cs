@@ -47,11 +47,24 @@ namespace ForgiumTwo
             MemoryOperations.Fill(image.RawData, col.ToArgb());
         }
 
+        public void DrawBorder(Dictionary<string, object[]> CSSClass, int X, int Y, Size region)
+        {
+            image.DrawFilledRoundedRectangle(X, Y, region.Width, region.Height,
+                (int)CSSClass["border-top-left-radius"][0],
+                (int)CSSClass["border-top-right-radius"][0],
+                (int)CSSClass["border-bottom-right-radius"][0],
+                (int)CSSClass["border-bottom-left-radius"][0],
+                (Color)CSSClass["border-color"][0]);
+        }
+
         public void DrawRectangle(Dictionary<string, object[]> CSSClass, int X, int Y, Size region)
         {
-            image.DrawFilledRoundedRectangle(X, Y, region.Width, region.Height, 0, (Color)CSSClass["background-color"][0]);
-            Kernel.PrintDebug(Y.ToString());
-            Kernel.PrintDebug(region.Height.ToString());
+            image.DrawFilledRoundedRectangle(X, Y, region.Width, region.Height,
+                (int)CSSClass["border-top-left-radius"][0],
+                (int)CSSClass["border-top-right-radius"][0],
+                (int)CSSClass["border-bottom-right-radius"][0],
+                (int)CSSClass["border-bottom-left-radius"][0],
+                (Color)CSSClass["background-color"][0]);
         }
 
         public void DrawText(Dictionary<string, object[]> CSSClass, int X, int Y, string text, Size region)
@@ -59,8 +72,8 @@ namespace ForgiumTwo
             fonts[(string)CSSClass["font-family"][0]+ (string)CSSClass["font-weight"][0]].DrawToSurface(
                 surface,
                 (int)CSSClass["font-size"][0],
-                X + (int)CSSClass["padding-left"][0],
-                Y+ ((int)CSSClass["font-size"][0]- (int)CSSClass["font-size"][0] / 5) + (int)CSSClass["padding-top"][0],
+                X,
+                Y+ ((int)CSSClass["font-size"][0]- (int)CSSClass["font-size"][0] / 5),
                 text,
                 (Color)CSSClass["color"][0]
                 );

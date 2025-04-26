@@ -27,7 +27,7 @@ namespace ForgiumTwo
             surface.fonts["arialbold"] = new(arialb);
             Forgium.Forgium forgium = new(surface);
             var d = new HtmlDocument();
-            d.LoadHtml(@"<html><head></head><body><h1 style='color: #FF0000;'>Hello, World!</h1><a>test</a><a>test2</a><a>test3</a></body></html>");
+            d.LoadHtml(@"<html><head></head><body><h1 style='background-color: #0000FF;border-radius: 20px 10px;'>Hello, World!</h1><a>test</a><a>test2</a><button>testbtn</button><a>test3</a><input></body></html>");
             forgium.Render(d);
             canv.DrawImage(surface.image,0,0);
             canv.Display();

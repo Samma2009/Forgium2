@@ -24,6 +24,13 @@ default {
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
+    border-color: #000000;
+    border-style: none;
+    border-width: 1px;
+    border-radius: 0px;
+    width: auto;
+    height: auto;
+    --forgium-no-text-required: false;
 }
 
 h1 {
@@ -45,6 +52,34 @@ body {
 
 div {
     --forgium-custom-behavior: additive-css precalculate-size;
+}
+
+button {
+    background-color: #F0F0F0;
+    border-style: solid;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    padding-left: 4px;
+    padding-right: 2px;
+    border-radius: 2px;
+    margin-right:4px;
+    border-color: #C0C0C0;
+}
+
+input {
+    display: block;
+    background-color: #FFFFFF;
+    border-style: solid;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    padding-left: 4px;
+    padding-right: 2px;
+    border-radius: 2px;
+    margin-right:4px;
+    border-color: #C0C0C0;
+    width: 177px;
+    height: 21px;
+    --forgium-no-text-required: true;
 }
 ";
 
@@ -195,23 +230,40 @@ div {
                             Kernel.PrintDebug(Inline);
                         }
 
+                        if ((string)CSSRules["--forgium-no-text-required"][0] == "true" && (string.IsNullOrWhiteSpace(node.InnerText) | string.IsNullOrEmpty(node.InnerText)))
+                            node.ChildNodes.Add(new(HtmlNodeType.Text,node.OwnerDocument,0));
+                        if (!node.Closed)
+                            node.ChildNodes.Add(new(HtmlNodeType.Text, node.OwnerDocument, 0));
+
                         foreach (var item in node.ChildNodes) Iterate(item, CSSRules);
                     }
                     break;
                 case HtmlNodeType.Text:
                     {
                         Kernel.PrintDebug("hit text");
+                        if((string)ParentCSS["--forgium-no-text-required"][0] == "false")
+                            if(string.IsNullOrWhiteSpace(node.InnerText) | string.IsNullOrEmpty(node.InnerText)) return;
 
-                        if (string.IsNullOrWhiteSpace(node.InnerText) | string.IsNullOrEmpty(node.InnerText)) return;
+                        Kernel.PrintDebug("passed");
+                        Kernel.PrintDebug((string)ParentCSS["--forgium-no-text-required"][0]);
 
                         var size = renderingSurface.CaculateTextSize(node.InnerText, ParentCSS);
 
                         if (ParentCSS.ContainsKey("display") && (string)ParentCSS["display"][0] == "block")
                         {
-                            size.Width = renderingSurface.width;
-                            size.Width -= (int)CSSRuleSet["body"]["margin-right"][0];
-                            size.Width -= Cursor.X;
-                            size.Width -= (int)ParentCSS["margin-left"][0] + (int)CSSRuleSet["body"]["margin-left"][0];
+                            Kernel.PrintDebug(ParentCSS["width"][0].ToString());
+                            if ((string)ParentCSS["width"][0] != "auto")
+                            {
+                                Kernel.PrintDebug("width set");
+                                size.Width = (int)ParentCSS["width"][0];
+                            }
+                            else
+                            {
+                                size.Width = renderingSurface.width;
+                                size.Width -= (int)CSSRuleSet["body"]["margin-right"][0];
+                                size.Width -= Cursor.X;
+                                size.Width -= (int)ParentCSS["margin-left"][0] + (int)CSSRuleSet["body"]["margin-left"][0];
+                            }
                         }
 
                         if (Cursor.X + size.Width + (int)ParentCSS["margin-left"][0] >= renderingSurface.width)
@@ -222,12 +274,20 @@ div {
                         size.Width += (int)ParentCSS["padding-right"][0]+ (int)ParentCSS["padding-left"][0];
                         size.Height += (int)ParentCSS["padding-bottom"][0]+ (int)ParentCSS["padding-top"][0];
 
+                        if ((string)ParentCSS["border-style"][0] != "none")
+                        {
+                            renderingSurface.DrawBorder(ParentCSS,
+                            Cursor.X + (int)ParentCSS["margin-left"][0] + (int)CSSRuleSet["body"]["margin-left"][0] -(int)ParentCSS["border-width"][0],
+                            Cursor.Y + (int)ParentCSS["margin-top"][0] + (int)CSSRuleSet["body"]["margin-top"][0] - (int)ParentCSS["border-width"][0] - (int)ParentCSS["padding-top"][0],
+                            new(size.Width + (int)ParentCSS["border-width"][0] * 2, size.Height+ (int)ParentCSS["border-width"][0] * 2));
+                        }
+
                         renderingSurface.DrawRectangle(ParentCSS,
                             Cursor.X + (int)ParentCSS["margin-left"][0] + (int)CSSRuleSet["body"]["margin-left"][0],
-                            Cursor.Y + (int)ParentCSS["margin-top"][0] + (int)CSSRuleSet["body"]["margin-top"][0],
+                            Cursor.Y + (int)ParentCSS["margin-top"][0] + (int)CSSRuleSet["body"]["margin-top"][0] - (int)ParentCSS["padding-top"][0],
                             size);
                         renderingSurface.DrawText(ParentCSS,
-                            Cursor.X + (int)ParentCSS["margin-left"][0] + (int)CSSRuleSet["body"]["margin-left"][0],
+                            Cursor.X + (int)ParentCSS["padding-left"][0] + (int)ParentCSS["margin-left"][0] + (int)CSSRuleSet["body"]["margin-left"][0],
                             Cursor.Y + (int)ParentCSS["margin-top"][0] + (int)CSSRuleSet["body"]["margin-top"][0],
                             node.InnerText,size);
 

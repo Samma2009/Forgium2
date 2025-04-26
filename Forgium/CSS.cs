@@ -37,7 +37,103 @@ namespace Forgium
                     {
                         var propertyName = trimmedLine.Substring(0, splitIndex).Trim();
                         var propertyValue = trimmedLine.Substring(splitIndex + 1).Trim().TrimEnd(';');
-                        cssDictionary[currentSelector][propertyName] = ParsePropertyValues(propertyValue);
+                        var val = ParsePropertyValues(propertyValue);
+                        switch (propertyName)
+                        {
+                            case "border-radius":
+                                if (val.Length == 1)
+                                {
+                                    cssDictionary[currentSelector]["border-top-left-radius"] = val;
+                                    cssDictionary[currentSelector]["border-top-right-radius"] = val;
+                                    cssDictionary[currentSelector]["border-bottom-right-radius"] = val;
+                                    cssDictionary[currentSelector]["border-bottom-left-radius"] = val;
+                                }
+                                else if (val.Length == 2)
+                                {
+                                    cssDictionary[currentSelector]["border-top-left-radius"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["border-top-right-radius"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["border-bottom-left-radius"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["border-bottom-right-radius"] = new object[] { val[0] };
+                                }
+                                else if (val.Length == 3)
+                                {
+                                    cssDictionary[currentSelector]["border-top-left-radius"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["border-top-right-radius"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["border-bottom-left-radius"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["border-bottom-right-radius"] = new object[] { val[2] };
+                                }
+                                else if (val.Length == 4)
+                                {
+                                    cssDictionary[currentSelector]["border-top-left-radius"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["border-top-right-radius"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["border-bottom-left-radius"] = new object[] { val[3] };
+                                    cssDictionary[currentSelector]["border-bottom-right-radius"] = new object[] { val[2] };
+                                }
+                                break;
+                            case "margin":
+                                if (val.Length == 1)
+                                {
+                                    cssDictionary[currentSelector]["margin-top"] = val;
+                                    cssDictionary[currentSelector]["margin-right"] = val;
+                                    cssDictionary[currentSelector]["margin-bottom"] = val;
+                                    cssDictionary[currentSelector]["margin-left"] = val;
+                                }
+                                else if (val.Length == 2)
+                                {
+                                    cssDictionary[currentSelector]["margin-top"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["margin-right"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["margin-bottom"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["margin-left"] = new object[] { val[1] };
+                                }
+                                else if (val.Length == 3)
+                                {
+                                    cssDictionary[currentSelector]["margin-top"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["margin-right"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["margin-bottom"] = new object[] { val[2] };
+                                    cssDictionary[currentSelector]["margin-left"] = new object[] { val[1] };
+                                }
+                                else if (val.Length == 4)
+                                {
+                                    cssDictionary[currentSelector]["margin-top"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["margin-right"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["margin-bottom"] = new object[] { val[2] };
+                                    cssDictionary[currentSelector]["margin-left"] = new object[] { val[3] };
+                                }
+                                break;
+                            case "padding":
+                                if (val.Length == 1)
+                                {
+                                    cssDictionary[currentSelector]["padding-top"] = val;
+                                    cssDictionary[currentSelector]["padding-right"] = val;
+                                    cssDictionary[currentSelector]["padding-bottom"] = val;
+                                    cssDictionary[currentSelector]["padding-left"] = val;
+                                }
+                                else if (val.Length == 2)
+                                {
+                                    cssDictionary[currentSelector]["padding-top"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["padding-right"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["padding-bottom"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["padding-left"] = new object[] { val[1] };
+                                }
+                                else if (val.Length == 3)
+                                {
+                                    cssDictionary[currentSelector]["padding-top"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["padding-right"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["padding-bottom"] = new object[] { val[2] };
+                                    cssDictionary[currentSelector]["padding-left"] = new object[] { val[1] };
+                                }
+                                else if (val.Length == 4)
+                                {
+                                    cssDictionary[currentSelector]["padding-top"] = new object[] { val[0] };
+                                    cssDictionary[currentSelector]["padding-right"] = new object[] { val[1] };
+                                    cssDictionary[currentSelector]["padding-bottom"] = new object[] { val[2] };
+                                    cssDictionary[currentSelector]["padding-left"] = new object[] { val[3] };
+                                }
+                                break;
+                            default:
+                                cssDictionary[currentSelector][propertyName] = val;
+                                break;
+                        }
                     }
                 }
             }

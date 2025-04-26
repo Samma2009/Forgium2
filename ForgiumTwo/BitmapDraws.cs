@@ -110,30 +110,63 @@ namespace OpenTerm
             bmp.RawData[X + Y * bmp.Width] = color.ToArgb();
             
         }
-        public static void DrawFilledRoundedRectangle(this Bitmap bmp, int left, int top, int width, int height, int r, Color color)
+        public static void DrawFilledRoundedRectangle(
+        this Bitmap bmp,
+        int left, int top,
+        int width, int height,
+        int rTL, int rTR, int rBR, int rBL,
+        Color color)
         {
+            int right = left + width;
+            int bottom = top + height;
 
-            // Draw the straight lines of the rectangle
-            for (int i = left + r; i < left + width - r; i++)
+            // Pre-clamp radii so they never exceed half the rect dimensions
+            rTL = Math.Max(0, Math.Min(rTL, Math.Min(width, height) / 2));
+            rTR = Math.Max(0, Math.Min(rTR, Math.Min(width, height) / 2));
+            rBR = Math.Max(0, Math.Min(rBR, Math.Min(width, height) / 2));
+            rBL = Math.Max(0, Math.Min(rBL, Math.Min(width, height) / 2));
+
+            // For each scanline...
+            for (int y = top; y < bottom; y++)
             {
-                for (int j = top; j < top + height; j++)
+                // Compute how much to inset on the left
+                int insetL = 0;
+                if (y < top + rTL)
                 {
-                    DrawPixel(bmp,i, j, color);
+                    // Top-left quarter-circle
+                    int dy = (top + rTL) - y;
+                    insetL = rTL - (int)Math.Floor(Math.Sqrt(rTL * (long)rTL - dy * (long)dy));
+                }
+                else if (y >= bottom - rBL)
+                {
+                    // Bottom-left quarter-circle
+                    int dy = y - (bottom - rBL - 1);
+                    insetL = rBL - (int)Math.Floor(Math.Sqrt(rBL * (long)rBL - dy * (long)dy));
+                }
+
+                // Compute how much to inset on the right
+                int insetR = 0;
+                if (y < top + rTR)
+                {
+                    // Top-right quarter-circle
+                    int dy = (top + rTR) - y;
+                    insetR = rTR - (int)Math.Floor(Math.Sqrt(rTR * (long)rTR - dy * (long)dy));
+                }
+                else if (y >= bottom - rBR)
+                {
+                    // Bottom-right quarter-circle
+                    int dy = y - (bottom - rBR - 1);
+                    insetR = rBR - (int)Math.Floor(Math.Sqrt(rBR * (long)rBR - dy * (long)dy));
+                }
+
+                // Fill the span [left+insetL, right-insetR)
+                int xStart = left + insetL;
+                int xEnd = right - insetR;
+                for (int x = xStart; x < xEnd; x++)
+                {
+                    DrawPixel(bmp, x, y, color);
                 }
             }
-            for (int i = left; i < left + width; i++)
-            {
-                for (int j = top + r; j < top + height - r; j++)
-                {
-                    DrawPixel(bmp,i, j, color);
-                }
-            }
-
-            // Drawidththe corners
-            DrawCircle(bmp,left + r, top + r, r, color);  // Top-left corner
-            DrawCircle(bmp,left + width - r, top + r, r, color);  // Top-right corner
-            DrawCircle(bmp,left + r, top + height - r, r, color);  // Bottom-left corner
-            DrawCircle(bmp,left + width - r, top + height - r, r, color);  // Bottom-right corner
         }
 
         public static void DrawRectangle(this Bitmap bmp, int left, int top, int width, int height, Color color)
@@ -215,36 +248,16 @@ namespace OpenTerm
                 }
             }
         }
-        public static void DrawCircle(this Bitmap bmp, int cx, int cy, int r, Color color)
+        public static void FillCircle(this Bitmap bmp,int cx, int cy,int r,Color color)
         {
-            // Midpoint circle algorithm
-            int x = r;
-            int y = 0;
-            int err = 0;
-
-            while (x >= y)
+            int rSq = r * r;
+            for (int dy = -r; dy <= r; dy++)
             {
-                // Draw horizontal lines from left to right
-                for (int i = cx - x; i <= cx + x; i++)
+                int yy = cy + dy;
+                int dxLimit = (int)Math.Floor(Math.Sqrt(rSq - dy * dy));  // avoid sqrt artifacts :contentReference[oaicite:2]{index=2}
+                for (int dx = -dxLimit; dx <= dxLimit; dx++)
                 {
-                    DrawPixel(bmp,i, cy + y, color);
-                    DrawPixel(bmp,i, cy - y, color);
-                }
-                for (int i = cx - y; i <= cx + y; i++)
-                {
-                    DrawPixel(bmp,i, cy + x, color);
-                    DrawPixel(bmp,i, cy - x, color);
-                }
-
-                if (err <= 0)
-                {
-                    y += 1;
-                    err += 2 * y + 1;
-                }
-                if (err > 0)
-                {
-                    x -= 1;
-                    err -= 2 * x + 1;
+                    DrawPixel(bmp, cx + dx, yy, color);
                 }
             }
         }
